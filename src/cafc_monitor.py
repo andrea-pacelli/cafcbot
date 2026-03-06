@@ -77,10 +77,13 @@ def fetch_opinion_text(url: str) -> str:
 def summarise(title: str, text: str) -> str:
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     prompt = textwrap.dedent(f"""
-        You are a patent and appellate litigation attorney writing for LinkedIn.
-        Summarise the following Federal Circuit precedential opinion in EXACTLY
-        100 words. Lead with the key legal holding. Write for IP lawyers and
-        in-house counsel. Use plain, confident prose — no bullet points, no hashtags.
+        You are a patent and appellate litigation attorney writing for
+        LinkedIn.  Summarize the following Federal Circuit
+        precedential opinion in about 100 words, divided into 4
+        paragraphs: headline (key holding); summary of facts and
+        outcome; key quote; take-home. Write in a way that is
+        understandable by a layperson, while still conveying useful
+        information to IP lawyers. No bullet points, no hashtags.
 
         Opinion title: {title}
 
@@ -111,16 +114,21 @@ def send_email(subject: str, body: str) -> None:
 
 
 def main():
+    print("Fetching today's opinions... ", end='')
     opinions = fetch_todays_precedential_opinions()
-    if not opinions:
-        print(f"{date.today()} – No precedential opinions today.")
+    if opinions:
+        print(f"{len(opinions)} opinions fetched.")
+    else:
+        print("No precedential opinions today.")
         return
 
+    print("Creating summaries...")
     summaries = []
     for op in opinions:
         print(f"Processing: {op['title']}")
         try:
             summary = summarise(op["title"], fetch_opinion_text(op["url"]))
+            print(summary)
             summaries.append(f"=== {op['title']} ===\n{op['url']}\n\n{summary}\n")
         except Exception as exc:
             print(f"  ERROR: {exc}")
