@@ -24,6 +24,7 @@ import io
 import os
 import smtplib
 import textwrap
+import re
 from datetime import date
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -37,6 +38,7 @@ OPINIONS_URL = "https://www.cafc.uscourts.gov/home/case-information/opinions-ord
 BASE_URL     = "https://www.cafc.uscourts.gov"
 HEADERS      = {"User-Agent": "Mozilla/5.0 (compatible; cafc-monitor/1.0)"}
 TODAY        = date.today().strftime("%m/%d/%Y")    # e.g. "03/06/2026"
+#TODAY        = "03/06/2026" # for testing
 
 
 def fetch_todays_precedential_opinions() -> list[dict]:
@@ -52,10 +54,12 @@ def fetch_todays_precedential_opinions() -> list[dict]:
         link = row.find("a", href=True)
         if not link:
             continue
+        title = link.get_text(strip=True)
+        title = re.sub(r'\s*\[OPINION\]\s*', '', title)
         href = link["href"]
         if not href.startswith("http"):
             href = BASE_URL + href
-        opinions.append({"title": link.get_text(strip=True), "url": href})
+        opinions.append({"title": title, "url": href})
 
     return opinions
 
@@ -77,13 +81,12 @@ def fetch_opinion_text(url: str) -> str:
 def summarise(title: str, text: str) -> str:
     client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
     prompt = textwrap.dedent(f"""
-        You are a patent and appellate litigation attorney writing for
-        LinkedIn.  Summarize the following Federal Circuit
-        precedential opinion in about 100 words, divided into 4
-        paragraphs: headline (key holding); summary of facts and
-        outcome; key quote; take-home. Write in a way that is
+        Summarize the following Federal Circuit precedential opinion
+        in no more than 200 words, divided into 3 paragraphs: headline;
+        summary of facts and outcome; a key quote from the opinion, in
+        full and literally, no paraphrasing. Write in a way that is
         understandable by a layperson, while still conveying useful
-        information to IP lawyers. No bullet points, no hashtags.
+        information to patent practitioners.
 
         Opinion title: {title}
 
@@ -93,7 +96,7 @@ def summarise(title: str, text: str) -> str:
 
     msg = client.messages.create(
         model="claude-sonnet-4-20250514",
-        max_tokens=300,
+        max_tokens=400,
         messages=[{"role": "user", "content": prompt}],
     )
     return msg.content[0].text.strip()
@@ -134,8 +137,9 @@ def main():
             print(f"  ERROR: {exc}")
 
     if summaries:
-        body = f"CAFC precedential opinions – {date.today()}\n\n" + "\n\n".join(summaries)
-        send_email(subject=f"CAFC Opinions – {date.today()}", body=body)
+        subject = f"CAFC precedential opinions – {date.today()}"
+        body = "\n\n".join(summaries)
+        send_email(subject=subject, body=body)
         print(f"Emailed {len(summaries)} summaries.")
 
 

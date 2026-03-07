@@ -66,12 +66,6 @@ Password](https://support.google.com/accounts/answer/185833), not your
 regular Gmail password. It's a good idea to create a dedicated email
 account for this, just in case.
 
-## Running Manually
-
-```bash
-/path/to/python3 cafcbot.py
-```
-
 ## License
 
 MIT
