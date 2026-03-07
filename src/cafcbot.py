@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-cafc_monitor.py
+cafcbot.py
 
 Checks the Federal Circuit opinions page for today's precedential opinions,
 summarizes each with Claude, and emails the summaries to you.
@@ -34,7 +34,7 @@ from pypdf import PdfReader
 
 OPINIONS_URL = "https://www.cafc.uscourts.gov/home/case-information/opinions-orders/"
 BASE_URL     = "https://www.cafc.uscourts.gov"
-HEADERS      = {"User-Agent": "Mozilla/5.0 (compatible; cafc-monitor/1.0)"}
+HEADERS      = {"User-Agent": "Mozilla/5.0 (compatible; cafcbot/1.0)"}
 TODAY        = date.today().strftime("%m/%d/%Y")    # e.g. "03/06/2026"
 #TODAY        = "03/06/2026" # for testing
 
