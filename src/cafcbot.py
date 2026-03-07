@@ -16,8 +16,6 @@ Required environment variables:
     SMTP_HOST           - e.g. smtp.gmail.com  (default: smtp.gmail.com)
     SMTP_PORT           - e.g. 587             (default: 587)
 
-Cron (runs at 11am daily):
-    0 11 * * * /usr/bin/python3 /path/to/cafc_monitor.py >> /path/to/cafc.log 2>&1
 """
 
 import io
