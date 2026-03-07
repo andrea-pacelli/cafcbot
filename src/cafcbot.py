@@ -6,7 +6,7 @@ Checks the Federal Circuit opinions page for today's precedential opinions,
 summarizes each with Claude, and emails the summaries to you.
 
 Setup (one time):
-    pip install --user requests beautifulsoup4 pypdf anthropic
+    pip install requests beautifulsoup4 pypdf anthropic
 
 Required environment variables:
     ANTHROPIC_API_KEY   - your Anthropic API key
