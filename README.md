@@ -2,16 +2,19 @@
 
 A lightweight Python script that monitors the Court of Appeals for the
 Federal Circuit (CAFC) for new precedential opinions, summarizes each
-using Claude. You can put it in your crontab to get a daily summary
-(around noon-ish to make sure all opinions for the day have been
-posted).
+using Claude, and emails the summary to you. You can add the script to
+your crontab to get a daily summary (around noon-ish to make sure all
+opinions for the day have been posted).
+
+By [Andrea Pacelli](https://www.linkedin.com/in/andrea-pacelli/) with
+more than a little help from Claude (for the boring bits).
 
 ## What It Does
 
 The script:
 
-1. Scrapes the [CAFC opinions page]
-   (https://www.cafc.uscourts.gov/home/case-information/opinions-orders/)
+1. Scrapes the [CAFC opinions
+   page](https://www.cafc.uscourts.gov/home/case-information/opinions-orders/)
    for new precedential opinions
 
 2. Downloads and extracts the text of each new opinion
@@ -25,7 +28,7 @@ The script:
 
 - Python 3.9+
 
-- An Anthropic API key (https://console.anthropic.com/)
+- An [Anthropic API key](https://console.anthropic.com/)
 
 - A Gmail account (or other SMTP server) for sending email
 
@@ -33,7 +36,7 @@ The script:
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourname/cafcbot.git
+git clone https://github.com/andrea-pacelli/cafcbot.git
 cd cafcbot
 
 # Create and activate a virtual environment (optional but recommended)
@@ -72,3 +75,4 @@ account for this, just in case.
 ## License
 
 MIT
+
