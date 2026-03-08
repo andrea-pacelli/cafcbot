@@ -93,7 +93,7 @@ def summarise(title: str, text: str) -> str:
     """).strip()
 
     msg = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=400,
         messages=[{"role": "user", "content": prompt}],
     )
