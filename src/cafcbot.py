@@ -65,14 +65,15 @@ def fetch_todays_precedential_opinions() -> list[dict]:
 def fetch_opinion_text(url: str) -> str:
     resp = requests.get(url, headers=HEADERS, timeout=60)
     resp.raise_for_status()
+    char_limit = 50_000 # about 25 pages
     if url.lower().endswith(".pdf"):
         reader = PdfReader(io.BytesIO(resp.content))
         pages = []
         for page in reader.pages:
             pages.append(page.extract_text() or "")
-            if sum(len(p) for p in pages) > 15_000:
+            if sum(len(p) for p in pages) > char_limit:
                 break
-        return "\n".join(pages)[:15_000]
+        return "\n".join(pages)[:char_limit]
     return BeautifulSoup(resp.text, "html.parser").get_text(" ", strip=True)[:15_000]
 
 
