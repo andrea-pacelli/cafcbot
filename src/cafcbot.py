@@ -115,7 +115,7 @@ def send_email(subject: str, body: str) -> None:
 
 
 def main():
-    print("Fetching today's opinions... ", end='')
+    print(f"{TODAY} Fetching today's opinions... ", end='')
     opinions = fetch_todays_precedential_opinions()
     if opinions:
         print(f"{len(opinions)} opinions fetched.")
