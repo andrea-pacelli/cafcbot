@@ -74,7 +74,7 @@ def fetch_opinion_text(url: str) -> str:
             if sum(len(p) for p in pages) > char_limit:
                 break
         return "\n".join(pages)[:char_limit]
-    return BeautifulSoup(resp.text, "html.parser").get_text(" ", strip=True)[:15_000]
+    return BeautifulSoup(resp.text, "html.parser").get_text(" ", strip=True)[:char_limit]
 
 
 def summarise(title: str, text: str) -> str:
