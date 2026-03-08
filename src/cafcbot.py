@@ -130,7 +130,6 @@ def main():
         print(f"Processing: {op['title']}")
         try:
             summary = summarise(op["title"], fetch_opinion_text(op["url"]))
-            print(summary)
             summaries.append(f"=== {op['title']} ===\n{op['url']}\n\n{summary}\n")
         except Exception as exc:
             print(f"  ERROR: {exc}")
